@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заявка на посещение музея СВО САФУ</title>
+</head>
+<body id="body">
+    <form id = "application-form" method="post" autocomplete="off">
+        <!--    Date    -->
+        <div>
+            <label>
+                Дата посещения
+                <input type="date" name="visit_date" required/>
+            </label>
+        </div>
+
+        <!--    Time    -->
+        <div>
+            <label>
+                Время посещения
+                <input type="time" name="visit_time" required />
+            </label>
+        </div>
+
+        <!--    Org     -->
+        <div>
+            <label>
+                Организация
+                <select id = "organization-select" name="organization" required>
+                    <option value="" disabled selected>Выберите организацию</option>
+                    <option value="narfu">САФУ</option>
+                    <option value="another">Другое</option>
+                </select>
+            </label>
+        </div>
+
+        <!--    CB      -->
+        <!--    CV      -->
+        <div>
+            <label>
+                Количество посетителей
+                <input type="number" name="count_of_customers" required/>
+            </label>
+        </div>
+        <!--    NoA     -->
+        <div>
+            <label>
+                ФИО сопровождающего/педагога
+                <input type="text" name="name_of_accompanying" required />
+            </label>
+        </div>
+
+        <!--    Phone   -->
+        <div>
+            <label>
+                Номер телефона сопровождающего/педагога
+                <input type="text" name="phone_number_of_accompanying" required />
+            </label>
+        </div>
+
+        <!--    Submit  -->
+        <div>
+            <input type="submit" value="Отправить" />
+        </div>
+    </form>
+    <script src="/static/scripts/form/form_script.js"></script>
+</body>
+</html>
