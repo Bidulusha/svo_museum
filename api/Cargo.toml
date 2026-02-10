@@ -11,6 +11,7 @@ crate = "0.1.1"
 dotenv = "0.15.0"
 postgres = "0.19.12"
 postgres-openssl = "0.5.2"
+postgres-types = "0.2.12"
 serde = { version = "1.0.228", features = ["derive"] }
 sqlx = { version = "0.8.6", features = ["postgres"] }
 tokio = { version = "1.49.0", features = ["rt-multi-thread", "macros"] }

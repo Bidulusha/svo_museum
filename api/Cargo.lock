@@ -1855,6 +1855,7 @@ dependencies = [
  "dotenv",
  "postgres",
  "postgres-openssl",
+ "postgres-types",
  "serde",
  "sqlx",
  "tokio",
