@@ -1,3 +1,5 @@
+mod form_structures;
+
 use askama::Template;
 use axum::{
     response::{
@@ -7,14 +9,7 @@ use axum::{
     },
     http::StatusCode,
 };
-use serde_html_form;
-
-mod form_structures;
-use form_structures::{
-    ApplicationForm,
-    AnotherFormRaw,
-    NarfuFormRaw
-};
+use reqwest;
 
 //Base html template struct and handler
 struct HtmlTemplate<T>(T);
@@ -63,26 +58,15 @@ pub async fn form_page() -> impl IntoResponse {
 struct SubmittedFormTemplate {}
 
 pub async fn submitted_form_page(raw_data: String) -> impl IntoResponse{
-    let data: ApplicationForm;
-    match serde_html_form::from_str::<NarfuFormRaw>(&raw_data){
-        Ok(form) => {
-            data = form.into();
-            println!("{:?}", data);
-        }
-        Err(_) => {
-            match serde_html_form::from_str::<AnotherFormRaw>(&raw_data){
-                Ok(form) => {
-                    data = form.into();
-                    println!("{:?}", data);
-                }
-                Err(err) => {
-                    println!("Error to deserialize data! Error message {}", err) // ADD ERROR PAGE
-                }
-            }
-        }
-    }
-
     let template = SubmittedFormTemplate {};
+
+    let client = reqwest::Client::new();
+    println!("{}", raw_data);
+    client.post("http://localhost:8080/api/insert_application")
+        .body(raw_data)
+        .send()
+        .await.unwrap();
+
     HtmlTemplate(template)
 }
 

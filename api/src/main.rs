@@ -1,17 +1,29 @@
 mod route;
 mod database;
 
+
+use dotenv::dotenv;
+use tower_http::cors::{CorsLayer};
+use route::create_route;
+use database::model::ApplicationForm;
+use std::sync::{Arc, Mutex};
+
+use tokio_postgres::{
+    NoTls,
+    Error,
+    Client
+};
+
 use axum::http::{
     header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE},
     HeaderValue, Method
 };
-use dotenv::dotenv;
-use tower_http::cors::{CorsLayer};
-use route::create_route;
-use tokio_postgres::{
-    NoTls,
-    Error
-};
+
+struct AppState{
+    client: Client,
+    applications: Mutex<Vec<ApplicationForm>>
+}
+
 
 #[tokio::main]
 async fn main() -> Result<(), Error>{
@@ -27,17 +39,12 @@ async fn main() -> Result<(), Error>{
     let (client, connection) = 
         tokio_postgres::connect(&format!("host={} dbname={} user={} password={}", db_host, db_name, db_user, db_password), NoTls).await?;
 
+    
     tokio::spawn(async move{
         if let Err(err) = connection.await {
             eprint!("Connection error: {err}")
         }
     });
-
-    let rows = client
-        .query("select * from applications", &[])
-        .await?;
-
-    println!("{:?}", rows);
 
     //Cors layer
     let cors = CorsLayer::new()
@@ -47,7 +54,14 @@ async fn main() -> Result<(), Error>{
         .allow_headers([ACCEPT, AUTHORIZATION, CONTENT_TYPE]);
 
     //Create app
-    let app = create_route().layer(cors);
+    let shared_state = Arc::new(
+            AppState {
+                applications: Mutex::new(client.query("select * from applications order by id", &[])
+                    .await.unwrap().into_iter().map(Into::into).collect()),
+                client: client,
+            }
+        );
+    let app = create_route(shared_state).layer(cors);
     //Create listener
     let listener = tokio::net::TcpListener::bind("0.0.0.0:8080"). await.unwrap();
 
