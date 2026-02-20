@@ -18,5 +18,6 @@ pub fn create_route() -> Router {
         .route("/", get(handler::main_page))
         .route("/form", get(handler::form_page))
         .route("/form", post(handler::submitted_form_page))
+        .route("/admin", get(handler::admin_page))
         .nest_service("/static", ServeDir::new("static"))
 }

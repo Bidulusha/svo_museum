@@ -18,6 +18,22 @@ pub enum ApplicationStatus {
     ACCEPTED
 }
 
+#[derive(Debug, Clone, ToSql, FromSql, Serialize, Deserialize)]
+#[postgres(name = "excursion_status")]
+pub enum ExcursionStatus {
+    #[postgres(name="waiting accepting")]
+    WAITING,
+    #[postgres(name="accepted")]
+    ACCEPTED,
+    #[postgres(name="moved")]
+    MOVED,
+    #[postgres(name="cancelled")]
+    CANCELLED,
+    #[postgres(name="succeed")]
+    SUCCEED
+}
+
+
 /*                              NARFU FOMR                       */
 #[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct NarfuFormRaw{
@@ -56,5 +72,6 @@ pub struct ApplicationForm{
     pub count_of_customers: i16,
     pub name_of_accompanying: String,
     pub phone_number_of_accompanying: String,
-    pub status: ApplicationStatus
+    pub status: ApplicationStatus,
+    pub excursion_status: ExcursionStatus
 }

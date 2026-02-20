@@ -4,9 +4,10 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-askama = "0.15.4"
+askama = { version = "0.15.4", features = ["derive"] }
+askama-enum = { version = "0.0.2", features = ["askama"] }
 axum = "0.8.8"
-chrono = "0.4.43"
+chrono = { version = "0.4.43", features = ["serde"] }
 dotenv = "0.15.0"
 reqwest = "0.13.2"
 serde = { version = "1.0.228", features = ["derive"] }

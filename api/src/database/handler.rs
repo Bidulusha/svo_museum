@@ -7,7 +7,7 @@ use serde_html_form;
 // ADD TO DATABASE
 pub async fn add_application_to_database(State(state): State<Arc<AppState>>, raw_data: String){
     let mut data: Option<ApplicationForm> = None;
-        
+   
     match serde_html_form::from_str::<NarfuFormRaw>(&raw_data){
         Ok(form) => {
             data = Some(form.into());

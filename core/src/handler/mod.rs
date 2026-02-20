@@ -1,5 +1,8 @@
-mod form_structures;
+mod model;
 
+use std::collections::HashMap;
+
+use crate::handler::model::ApplicationStatus;
 use askama::Template;
 use axum::{
     response::{
@@ -8,8 +11,10 @@ use axum::{
         Response
     },
     http::StatusCode,
+    Json
 };
 use reqwest;
+use model::ApplicationForm;
 
 //Base html template struct and handler
 struct HtmlTemplate<T>(T);
@@ -61,7 +66,6 @@ pub async fn submitted_form_page(raw_data: String) -> impl IntoResponse{
     let template = SubmittedFormTemplate {};
 
     let client = reqwest::Client::new();
-    println!("{}", raw_data);
     client.post("http://localhost:8080/api/insert_application")
         .body(raw_data)
         .send()
@@ -70,7 +74,34 @@ pub async fn submitted_form_page(raw_data: String) -> impl IntoResponse{
     HtmlTemplate(template)
 }
 
+/*                      Admin page                   */
+#[derive(Template)]
+#[template(path="admin/index.html")]
+struct AdminPageTemplate {
+    //applications: Vec<ApplicationForm>
+}
 
+pub async fn admin_page() -> impl IntoResponse{    
+    let client = reqwest::Client::new();
+    let raw_data = client.get("http://localhost:8080/api/get_applications").send().await.unwrap().text().await.unwrap();
+    let applications:Vec<ApplicationForm> = serde_json::from_str(&raw_data).unwrap();
+    println!("{:?}", applications);
+    
+    // dicts
+    // let status_map = HashMap::from(
+    //     [
+    //         (ApplicationStatus::SUBMITTED, "Заполнена"),
+    //         (ApplicationStatus::NEEDEDITING, "Требует изменения"),
+    //         (ApplicationStatus::SUBMITTED, "Одобрена")
+
+    //     ]
+    // );
+
+
+    //let template = AdminPageTemplate { applications };
+    let template = AdminPageTemplate {};
+    HtmlTemplate(template)
+}
 
 
 // //Hello page

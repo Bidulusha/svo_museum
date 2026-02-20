@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+  <style>
+    input {
+      margin-left: auto;
+      margin-right: auto;
+      width: 90%;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        /* display: none; <- Crashes Chrome on hover */
+        -webkit-appearance: none;
+        margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+    }
+
+    input[type=number] {
+        -moz-appearance:textfield; /* Firefox */
+    }
+  </style>
+  <table id="table_app">
+    <tr>
+      <th v-for="field in headers">${ field }</th>
+    </tr>
+    <tr v-for="application in applications">
+      <td v-for="(field, index) in application">
+        <input v-if="index==='visit_date'" type="date" :value="field" />
+        <input v-else-if="index==='visit_time'" type="time" step="60" :value="field.slice(0,5)" />
+        <select v-else-if="index==='higher_school'">
+          <template v-for="(hs, index_hs) in higher_schools">
+            <option v-if="index_hs===Number(field.split('_')[2])" :value="index_hs>0? 'higher_school_' + index_hs: '-'" selected>${ hs }</option>
+            <option v-else :value="'higher_school_' + index_hs"> ${ hs }</option>
+          </template>
+        </select>
+        <select v-else-if="index==='status'">
+          <template v-for="(status, index_s) in status_list">
+            <option v-if="index_s===field" :value="index_s" selected>${ status }</option>
+            <option v-else :value="index_s"> ${ status }</option>
+          </template>
+        </select>
+        <input v-else :type="(typeof field)" :value="field" />
+      </td>
+    </tr>
+  </table>
+  <script src="/static/scripts/admin_page/admin_page_script.js"></script>
+</body>
+</html>

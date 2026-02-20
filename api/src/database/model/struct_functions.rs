@@ -2,7 +2,8 @@ use crate::database::model::{
     ApplicationForm,
     AnotherFormRaw,
     NarfuFormRaw,
-    ApplicationStatus
+    ApplicationStatus,
+    ExcursionStatus
 };
 use tokio_postgres::Row;
 use chrono::{NaiveDate, NaiveTime};
@@ -38,7 +39,8 @@ impl From<NarfuFormRaw> for ApplicationForm{
             count_of_customers: item.count_of_customers,
             name_of_accompanying: item.name_of_accompanying,
             phone_number_of_accompanying: item.phone_number_of_accompanying,
-            status: ApplicationStatus::SUBMITTED
+            status: ApplicationStatus::SUBMITTED,
+            excursion_status: ExcursionStatus::WAITING
         }
     }
 }
@@ -64,13 +66,14 @@ impl From<AnotherFormRaw> for ApplicationForm{
             visit_date: NaiveDate::parse_from_str(&item.visit_date, "%Y-%m-%d").unwrap(),
             visit_time: NaiveTime::parse_from_str(&item.visit_time, "%H:%M").unwrap(),
             organization: item.organization_name,
-            higher_school: String::from("-"),
+            higher_school: String::from("higher_school_0"),
             course: -1,
             group_of: -1,
             count_of_customers: item.count_of_customers,
             name_of_accompanying: item.name_of_accompanying,
             phone_number_of_accompanying: item.phone_number_of_accompanying,
-            status: ApplicationStatus::SUBMITTED
+            status: ApplicationStatus::SUBMITTED,
+            excursion_status: ExcursionStatus::WAITING
         }
     }
 }
@@ -87,7 +90,8 @@ impl From<Row> for ApplicationForm{
             count_of_customers: item.get(7),
             name_of_accompanying: item.get(8),
             phone_number_of_accompanying: item.get(9),
-            status: item.get(10)
+            status: item.get(10),
+            excursion_status: item.get(11)
         } 
     }
 }
