@@ -95,3 +95,13 @@ pub async fn admin_page() -> impl IntoResponse{  //UPDATE THIS TO WEBSOCKET CONN
     let template = AdminPageTemplate {};
     HtmlTemplate(template)
 }
+
+// Template calendar
+#[derive(Template)]
+#[template(path="admin/calendar.html")]
+struct AdminPageCalendarTemplate { }
+
+pub async fn calendar_page() -> impl IntoResponse {
+    let template = AdminPageCalendarTemplate {};
+    HtmlTemplate(template)
+}
