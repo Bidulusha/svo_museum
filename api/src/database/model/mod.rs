@@ -72,6 +72,8 @@ pub struct ApplicationForm{
     pub count_of_customers: i16,
     pub name_of_accompanying: String,
     pub phone_number_of_accompanying: String,
-    pub status: ApplicationStatus,
-    pub excursion_status: ExcursionStatus
+    pub application_status: ApplicationStatus,
+    pub excursion_status: ExcursionStatus,
+    pub feedback: String,
+    pub real_count_of_customers: i16
 }

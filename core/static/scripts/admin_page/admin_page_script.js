@@ -1,3 +1,13 @@
+const ws = new WebSocket('ws://localhost:8080/api/admin_page_ws', 'protocol1')
+
+ws.onopen = function (event) {
+    ws.send('Hallo??')
+}
+
+ws.onmessage = function (event) {
+    console.log(event.data)
+}
+
 const app = Vue.createApp({
     delimiters: ['${', '}'],
     data() {
@@ -6,7 +16,9 @@ const app = Vue.createApp({
                 'Дата посещения','Время посещения', 
                 'Организация', 'Высшая школа', 'Курс', 
                 'Группа', 'Количество посетителей', 'ФИО сопровождающего', 
-                'Телефонный номер сопровождающего', 'Стату заявки'],
+                'Телефонный номер сопровождающего', 'Стату заявки', 'Статус экскурсии',
+                'Обратная связь', 'Реальное количество участников'
+            ],
             higher_schools: [
                 "-",
                 "ВШИТАС", "ВИШ", "ВШСГНиМК", "ВШЭНиГ", 
@@ -14,10 +26,17 @@ const app = Vue.createApp({
                 "ТК Императора Петра I", "ГумИн", "ИСМАРТ", 
                 "ТК (Северодвинск)"
             ],
-            status_list: {
+            application_status_list: {
                 'SUBMITTED': 'заполнена',
                 'NEEDSEDITING': 'нужно отредактировать',
                 'ACCEPTED': 'принята'
+            },
+            excursion_status_list:{
+                'waiting accepting': 'Ожидает подтверждения',
+                'accepted': 'Принята',
+                'moved': 'Перенесена',
+                'cancelled': 'Отменена',
+                'succeed': 'Прошла'
             },
             applications: []
         }

@@ -1,27 +1,31 @@
 mod route;
 mod database;
+mod handler;
 
-
+use std::{
+    net::SocketAddr,
+    sync::{Arc},
+    collections::VecDeque
+};
 use dotenv::dotenv;
+
+
 use tower_http::cors::{CorsLayer};
 use route::create_route;
-use database::model::ApplicationForm;
-use std::sync::{Arc, Mutex};
-
 use tokio_postgres::{
     NoTls,
     Error,
     Client
 };
-
-use axum::http::{
-    header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE},
-    HeaderValue, Method
-};
+use tokio::sync::Mutex;
+use axum::{extract::ws::{Message, WebSocket}, http::{
+    HeaderValue, Method, header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE}
+}};
+use futures_util::stream::SplitSink;
 
 struct AppState{
     client: Client,
-    applications: Mutex<Vec<ApplicationForm>>
+    senders: Arc<Mutex<VecDeque<SplitSink<WebSocket, Message>>>>
 }
 
 
@@ -54,19 +58,16 @@ async fn main() -> Result<(), Error>{
         .allow_headers([ACCEPT, AUTHORIZATION, CONTENT_TYPE]);
 
     //Create app
-    let shared_state = Arc::new(
-            AppState {
-                applications: Mutex::new(client.query("select * from applications order by id", &[])
-                    .await.unwrap().into_iter().map(Into::into).collect()),
-                client: client,
-            }
-        );
-    let app = create_route(shared_state).layer(cors);
+    let mut state = AppState {
+            client,
+            senders: Arc::new(Mutex::new(VecDeque::<SplitSink<WebSocket, Message>>::new()))
+        };
+    let app = create_route(Arc::new(state)).layer(cors);
     //Create listener
     let listener = tokio::net::TcpListener::bind("0.0.0.0:8080"). await.unwrap();
 
     //start server
-    axum::serve(listener, app).await.unwrap();
+    axum::serve(listener, app.into_make_service_with_connect_info::<SocketAddr>()).await.unwrap();
 
     Ok(())
 }

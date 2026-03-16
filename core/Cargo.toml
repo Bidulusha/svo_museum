@@ -6,15 +6,17 @@ edition = "2024"
 [dependencies]
 askama = { version = "0.15.4", features = ["derive"] }
 askama-enum = { version = "0.0.2", features = ["askama"] }
-axum = "0.8.8"
+axum = { version = "0.8.8", features = ["ws"] }
+axum-extra = { version = "0.12.5", features = ["typed-header"] }
 chrono = { version = "0.4.43", features = ["serde"] }
 dotenv = "0.15.0"
 reqwest = "0.13.2"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_html_form = "0.4.0"
 serde_json = "1.0.149"
-tokio = { version = "1.49.0", features = ["macros", "rt-multi-thread"] }
-tower-http = { version = "0.6.8", features = ["fs"] }
+tokio = { version = "1.49.0", features = ["full"] }
+tokio-tungstenite = "0.28.0"
+tower-http = { version = "0.6.8", features = ["fs", "trace"] }
 tracing-subscriber = { version = "0.3.22", features = ["env-filter"] }
 uuid = "1.20.0"
 

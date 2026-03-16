@@ -39,8 +39,10 @@ impl From<NarfuFormRaw> for ApplicationForm{
             count_of_customers: item.count_of_customers,
             name_of_accompanying: item.name_of_accompanying,
             phone_number_of_accompanying: item.phone_number_of_accompanying,
-            status: ApplicationStatus::SUBMITTED,
-            excursion_status: ExcursionStatus::WAITING
+            application_status: ApplicationStatus::SUBMITTED,
+            excursion_status: ExcursionStatus::WAITING,
+            feedback: String::from(""),
+            real_count_of_customers: -1
         }
     }
 }
@@ -72,8 +74,10 @@ impl From<AnotherFormRaw> for ApplicationForm{
             count_of_customers: item.count_of_customers,
             name_of_accompanying: item.name_of_accompanying,
             phone_number_of_accompanying: item.phone_number_of_accompanying,
-            status: ApplicationStatus::SUBMITTED,
-            excursion_status: ExcursionStatus::WAITING
+            application_status: ApplicationStatus::SUBMITTED,
+            excursion_status: ExcursionStatus::WAITING,
+            feedback: String::from(""),
+            real_count_of_customers: -1,
         }
     }
 }
@@ -90,8 +94,10 @@ impl From<Row> for ApplicationForm{
             count_of_customers: item.get(7),
             name_of_accompanying: item.get(8),
             phone_number_of_accompanying: item.get(9),
-            status: item.get(10),
-            excursion_status: item.get(11)
+            application_status: item.get(10),
+            excursion_status: item.get(11),
+            feedback: item.get(12),
+            real_count_of_customers: item.get(13),
         } 
     }
 }

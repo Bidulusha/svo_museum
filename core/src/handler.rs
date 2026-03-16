@@ -1,8 +1,9 @@
-mod model;
+//Crates
+use crate::{
+    model
+};
 
-use std::collections::HashMap;
-
-use crate::handler::model::ApplicationStatus;
+//Axum askama tokio
 use askama::Template;
 use axum::{
     response::{
@@ -10,11 +11,16 @@ use axum::{
         IntoResponse, 
         Response
     },
-    http::StatusCode,
-    Json
+    http::StatusCode
 };
+
+//Reqwest
 use reqwest;
-use model::ApplicationForm;
+
+//Projects files
+use model::{
+    ApplicationForm
+};
 
 //Base html template struct and handler
 struct HtmlTemplate<T>(T);
@@ -77,41 +83,15 @@ pub async fn submitted_form_page(raw_data: String) -> impl IntoResponse{
 /*                      Admin page                   */
 #[derive(Template)]
 #[template(path="admin/index.html")]
-struct AdminPageTemplate {
-    //applications: Vec<ApplicationForm>
-}
+struct AdminPageTemplate { }
 
-pub async fn admin_page() -> impl IntoResponse{    
+pub async fn admin_page() -> impl IntoResponse{  //UPDATE THIS TO WEBSOCKET CONNECTION  
     let client = reqwest::Client::new();
-    let raw_data = client.get("http://localhost:8080/api/get_applications").send().await.unwrap().text().await.unwrap();
+    let raw_data = client.get("http://localhost:8080/api/get_applications")
+        .send().await.unwrap().text().await.unwrap();
     let applications:Vec<ApplicationForm> = serde_json::from_str(&raw_data).unwrap();
     println!("{:?}", applications);
     
-    // dicts
-    // let status_map = HashMap::from(
-    //     [
-    //         (ApplicationStatus::SUBMITTED, "Заполнена"),
-    //         (ApplicationStatus::NEEDEDITING, "Требует изменения"),
-    //         (ApplicationStatus::SUBMITTED, "Одобрена")
-
-    //     ]
-    // );
-
-
-    //let template = AdminPageTemplate { applications };
     let template = AdminPageTemplate {};
     HtmlTemplate(template)
 }
-
-
-// //Hello page
-// #[derive(Template)]
-// #[template(path = "hello_page/hello.html")]
-// struct HelloPageTemplate {
-//     name: String
-// }
-
-// pub async fn hello_page(extract::Path(name): extract::Path<String>) -> impl IntoResponse{
-//     let template = HelloPageTemplate { name };
-//     HtmlTemplate(template)
-// }

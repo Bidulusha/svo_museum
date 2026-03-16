@@ -8,8 +8,6 @@ use chrono::{
     NaiveDate,
 };
 
-use askama_enum::EnumTemplate;
-
 /*                              STATUS ENUM                      */
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ApplicationStatus {
@@ -17,6 +15,16 @@ pub enum ApplicationStatus {
     NEEDEDITING,
     ACCEPTED
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum ExcursionStatus {
+    WAITING,
+    ACCEPTED,
+    MOVED,
+    CANCELLED,
+    SUCCEED
+}
+
 
 /*                              APPLICATION FORM                 */
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -30,5 +38,8 @@ pub struct ApplicationForm{
     pub count_of_customers: i16,
     pub name_of_accompanying: String,
     pub phone_number_of_accompanying: String,
-    pub status: ApplicationStatus
+    pub application_status: ApplicationStatus,
+    pub excursion_status: ExcursionStatus,
+    pub feedback: String,
+    pub real_count_of_customers: i16
 }
