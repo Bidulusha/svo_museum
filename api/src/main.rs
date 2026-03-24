@@ -58,7 +58,7 @@ async fn main() -> Result<(), Error>{
         .allow_headers([ACCEPT, AUTHORIZATION, CONTENT_TYPE]);
 
     //Create app
-    let mut state = AppState {
+    let state = AppState {
             client,
             senders: Arc::new(Mutex::new(VecDeque::<SplitSink<WebSocket, Message>>::new()))
         };

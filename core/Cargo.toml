@@ -8,7 +8,6 @@ askama = { version = "0.15.4", features = ["derive"] }
 askama-enum = { version = "0.0.2", features = ["askama"] }
 axum = { version = "0.8.8", features = ["ws"] }
 axum-extra = { version = "0.12.5", features = ["typed-header"] }
-cargo-watch = "8.5.3"
 chrono = { version = "0.4.43", features = ["serde"] }
 dotenv = "0.15.0"
 reqwest = "0.13.2"

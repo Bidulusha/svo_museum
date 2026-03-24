@@ -1,11 +1,13 @@
 :root {
-    --size-of-cell: 1.5em;
+    --size-of-cell: 6rem;
     --gap: 0.2em;
 }   
 
 .calendar {
-    width: fit-content;
-    padding: 1.3em;
+    width: 60%;
+    /*padding: 1.3em;*/
+    margin: 1.3em;
+    overflow: hidden;
 
     border-radius: 1em;
 
@@ -15,6 +17,11 @@
 }
 
 .calendar__header {
+    font-size: 14pt;
+
+    padding: 0.8em;
+    padding-bottom: 0.3em;
+
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid #d4d4d4;
@@ -38,8 +45,8 @@
 }
 
 .calendar__day-numbers-row {
+    width: 100%;
     display: flex;
-    gap: var(--gap);
 }
 
 .calendar__day-numbers-row:first-child {
@@ -47,24 +54,50 @@
 }
 
 .calendar__day-name {
-    width: var(--size-of-cell);
-    align-content: center;
-    justify-content: center;
+    width: 100%;
+    align-content: right;
+    justify-content: right;
     display: flex;
-    text-align: center;  
+    text-align: right;  
+    padding: 0.3em;
+}
+
+.calendar__day-cell {
+    width: 100%;
+    height: 6vw;
+
+    border: 1px solid #f0f0f0;
+
+    display: flex;
 }
 
 .calendar__day-number {
-    align-content: center;
-    justify-content: center;
-    width: var(--size-of-cell);
-    height: var(--size-of-cell);
-    line-height: var(--size-of-cell);
-    display: flex;
-    text-align: center;   
+    /* align-content: start; */
+    height: 1em;
+    width: 1em;
+
+    margin: 0;
+
+    text-align: right;
+    margin-right: 0;
+    margin-left: auto;
+
+    padding: 0.3em;
 }
 
-.calendar__day-number--current {
+.calendar__day-cell--weekend {
+    background-color: #f9f9f9;
+}
+
+.calendar__day-cell--previous {
+    color: #BDBDBD;
+}
+
+.calendar__day-cell--next  {
+    color: #BDBDBD;
+}
+
+.calendar__day-number--current .calendar__day-number{
     background-color: aquamarine;
     border-radius: 50%;
 }
