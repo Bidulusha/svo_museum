@@ -154,7 +154,7 @@ class TableUI implements objectUI {
     };
     
     //Applications 
-    private applications: object[] = [];
+    private applications: object[] = []; // NO OBJECTS, only maps
 
     //Elements
     private tableDiv: HTMLDivElement = document.querySelector('.table');
