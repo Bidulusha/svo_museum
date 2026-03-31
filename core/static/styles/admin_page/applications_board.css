@@ -1,0 +1,24 @@
+:root {
+    --board-width: 40%
+}
+
+.applications_board {
+    @media screen and (max-width: 800px) {
+        width: 100%;
+    }
+    @media screen and (min-width: 800px) {
+        width: var(--board-width);
+    }
+    
+    overflow-x: scroll;
+    margin-top: 1vw;
+    margin-bottom: 1vw;
+
+    padding: 0.5em;
+
+    border-radius: 1em;
+
+    -webkit-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+    -moz-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+    box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+}

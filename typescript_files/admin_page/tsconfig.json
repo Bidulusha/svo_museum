@@ -1,9 +1,0 @@
-{
-    "compilerOptions": {
-        "target": "es5",
-        "lib": ["ES5", "ES2015", "dom"],
-        "module": "commonjs",
-        "removeComments": true,
-        "sourceMap": true
-    }
-}

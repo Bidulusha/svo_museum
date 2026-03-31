@@ -10,6 +10,12 @@ use tracing_subscriber::{
     util::SubscriberInitExt
 };
 
+use tower_http::cors::{CorsLayer};
+use axum::{extract::ws::{Message, WebSocket}, http::{
+    HeaderValue, Method, header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE}
+}};
+
+
 use tower_http::trace::TraceLayer;
 
 #[tokio::main]
@@ -23,6 +29,12 @@ async fn main(){
         .with(tracing_subscriber::fmt::layer())
         .init();
 
+
+    // let cors = CorsLayer::new()
+    //     .allow_origin("http://0.0.0.0:3000".parse::<HeaderValue>().unwrap())
+    //     .allow_methods([Method::GET, Method::POST, Method::PATCH, Method::DELETE])
+    //     .allow_credentials(true)
+    //     .allow_headers([ACCEPT, AUTHORIZATION, CONTENT_TYPE]);
     //Build route
     let app = route::create_route().layer(TraceLayer::new_for_http());
 

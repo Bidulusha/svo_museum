@@ -1,12 +1,21 @@
 :root {
     --size-of-cell: 6rem;
     --gap: 0.2em;
+    --calendar-width: 55%;
+    --cell-height: 5vw;
 }   
 
 .calendar {
-    width: 60%;
+    @media screen and (max-width: 800px) {
+        width: 100%;
+    }
+    @media screen and (min-width: 800px) {
+        width: var(--calendar-width);
+    }
     /*padding: 1.3em;*/
-    margin: 1.3em;
+    margin: 0;
+    margin-top: 1vw;
+    margin-bottom: 1vw;
     overflow: hidden;
 
     border-radius: 1em;
@@ -64,7 +73,7 @@
 
 .calendar__day-cell {
     width: 100%;
-    height: 6vw;
+    height: var(--cell-height);
 
     border: 1px solid #f0f0f0;
 

@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "outDir": "../../static/scripts/admin_page",
+        "target": "es2020",
+        "lib": ["ES5", "ES2015", "dom", "ES2017.Object"],
+        "module": "commonjs",
+        "removeComments": true,
+        "sourceMap": true
+    }
+}

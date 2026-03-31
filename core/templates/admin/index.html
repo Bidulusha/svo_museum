@@ -6,6 +6,7 @@
   <link href="/static/styles/admin_page/table.css" rel="stylesheet">
   <link href="/static/styles/admin_page/calendar.css" rel="stylesheet">
   <link href="/static/styles/admin_page/style.css" rel="stylesheet">
+  <link href="/static/styles/admin_page/applications_board.css" rel="stylesheet">
   <title>Document</title>
 </head>
 <body>
@@ -14,26 +15,42 @@
 
     </div>
     <div class="interactive-content">
-
       <!--                      Calendar                      -->
       <div class="calendar">
-            <header class="calendar__header">
-                <div class="calendar__month-and-year-name"></div>
-            </header>
-            <div class="calendar__grid">
-                <div class="calendar__day-names">
-                    <span class="calendar__day-name">Пн</span>
-                    <span class="calendar__day-name">Вт</span>
-                    <span class="calendar__day-name">Ср</span>
-                    <span class="calendar__day-name">Чт</span>
-                    <span class="calendar__day-name">Пт</span>
-                    <span class="calendar__day-name">Сб</span>
-                    <span class="calendar__day-name">Вс</span>
-                </div>
+        <header class="calendar__header">
+            <div class="calendar__month-and-year-name"></div>
+        </header>
+        <div class="calendar__grid">
+            <div class="calendar__day-names">
+                <span class="calendar__day-name">Пн</span>
+                <span class="calendar__day-name">Вт</span>
+                <span class="calendar__day-name">Ср</span>
+                <span class="calendar__day-name">Чт</span>
+                <span class="calendar__day-name">Пт</span>
+                <span class="calendar__day-name">Сб</span>
+                <span class="calendar__day-name">Вс</span>
             </div>
-            <div class="calendar__day-numbers"></div>
+        </div>
+        <div class="calendar__day-numbers"></div>
+      </div>
+      
+      <div class="applications_board">
+        <div class="applications_board__waiting_accepting">
+          <div class="applications_board__header">Ожидают подтверждения</div>
         </div>
 
+        <div class="applications_board__accepted">
+          <div class="applications_board__header">Принята</div>
+        </div>
+
+        <div class="applications_board__moved">
+          <div class="applications_board__header">Перенесена</div>
+        </div>
+
+        <div class="applications_board__cancelled">
+          <div class="applications_board__header">Отменена</div>
+        </div>
+      </div>
 
       <!--                    Application table               -->
       <table class="table">
