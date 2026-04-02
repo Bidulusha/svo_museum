@@ -1,3 +1,4 @@
+import { Application } from "/static/scripts/admin_page/objects/application";
 import { objectUI } from "/static/scripts/admin_page/ui_objects/interface.js";
 
 export class CalendarUI implements objectUI {
@@ -35,9 +36,9 @@ export class CalendarUI implements objectUI {
         
         for (let i = 1; i < 8; i++) {
             let day = document.createElement("span");
-            let dayNumber = document.createElement("p");
+            let dayNumber = document.createElement("div");
             day.classList.add("calendar__day-cell");
-            day.id = `${new Date(this.currentYear, this.currentMonth, i - firstDay + 1).toISOString().slice(0,10)}`;
+            day.id = `d${new Date(this.currentYear, this.currentMonth, i - firstDay + 2).toISOString().slice(0,10)}`;
             dayNumber.classList.add("calendar__day-number");
             dayNumber.innerText = `${new Date(this.currentYear, this.currentMonth, i - firstDay + 1).getDate()}`;
             (i < firstDay) && dayNumber.classList.add("calendar__day-cell--previous");
@@ -55,9 +56,9 @@ export class CalendarUI implements objectUI {
         // Current month without first week
         for (let i = 9 - firstDay; i < daysInMonth + 1; i++){
             let day = document.createElement("span");
-            let dayNumber = document.createElement("p");
+            let dayNumber = document.createElement("div");
             day.classList.add("calendar__day-cell");
-            day.id = `${new Date(this.currentYear, this.currentMonth, i).toISOString().slice(0,10)}`;
+            day.id = `d${new Date(this.currentYear, this.currentMonth, i + 1).toISOString().slice(0,10)}`;
             dayNumber.classList.add("calendar__day-number");
             dayNumber.innerText = i.toString();
             (i == this.currentDay) && day.classList.add("calendar__day-number--current");
@@ -74,10 +75,10 @@ export class CalendarUI implements objectUI {
 
                     for (let j = 1; j < 8 - new Date(this.currentYear, this.currentMonth, i).getDay(); j++){
                         let day = document.createElement("span");
-                        let dayNumber = document.createElement("p");
+                        let dayNumber = document.createElement("div");
                         day.classList.add("calendar__day-cell");
                         day.classList.add("calendar__day-cell--next");
-                        day.id = `${new Date(this.currentYear, this.currentMonth + 1, j).toISOString().slice(0,10)}`;
+                        day.id = `d${new Date(this.currentYear, this.currentMonth + 1, j + 1).toISOString().slice(0,10)}`;
                         dayNumber.classList.add("calendar__day-number");
                         dayNumber.innerText = j.toString();
 
@@ -101,20 +102,21 @@ export class CalendarUI implements objectUI {
     }
 
     // Add note to calendar
-    addNoteToDate = (name : string, date: Date, noteClick: Function = this.noteOnClick) => {
+    addNoteToDate = (name : string, date: Date, application: Application, noteClick: Function = this.noteOnClick) => {
         const noteDiv = document.createElement('div');
         noteDiv.innerText = name;
-        noteDiv.addEventListener("click", (e: Event) => noteClick(e, ))
+        noteDiv.classList.add("calendar__day-note");
+        noteDiv.addEventListener("click", (e: Event) => noteClick(e, application));
         try {
-            document.querySelector(`#${date.toISOString().slice(0,10)}`).appendChild(noteDiv);
+            document.querySelector(`#d${date.toISOString().slice(0,10)}`)!.appendChild(noteDiv);
         } catch (error) {
             console.error(error);
         }
     }
 
     // function for note on click
-    private noteOnClick = (e: Event, noteId: number) => {
-
+    private noteOnClick = (e: Event, note: Application) => {
+        alert(`Время проведения = ${note.time}`);
     }
 
     // Clean UI

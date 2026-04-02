@@ -78,6 +78,7 @@
     border: 1px solid #f0f0f0;
 
     display: flex;
+    flex-direction: column;
 }
 
 .calendar__day-number {
@@ -93,6 +94,22 @@
 
     padding: 0.3em;
 }
+
+.calendar__day-note {
+    /* width: fit-content; */
+    padding: 0.1em;
+    font-size: 0.8rem;
+    
+    margin-right: 0;
+    margin-left: auto;
+    
+    background-color: aquamarine;
+    border-radius: 20%;
+
+}
+
+
+
 
 .calendar__day-cell--weekend {
     background-color: #f9f9f9;

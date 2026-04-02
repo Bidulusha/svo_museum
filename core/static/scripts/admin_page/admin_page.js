@@ -1,24 +1,36 @@
 import { CalendarUI } from "/static/scripts/admin_page/ui_objects/calendar.js";
 import { TableUI } from "/static/scripts/admin_page/ui_objects/table.js";
-async function setupUI(calendar, table) {
+import { Application } from "/static/scripts/admin_page/objects/application.js";
+import { API_URL } from "/static/scripts/admin_page/constants.js";
+import { ArrayQueue, } from "/static/scripts/admin_page/websocket-ts.js";
+console.log(ArrayQueue);
+async function getApplications(url) {
     try {
-        await table.setup("http://localhost:8080/api/get_applications");
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        const result = await response.json();
+        const applications = [];
+        result.forEach((value) => {
+            applications.push(Object.assign(new Application(), value));
+        });
+        return applications;
     }
     catch (error) {
         console.error(error);
+        return [];
     }
-    table.create();
-    calendar.create();
-}
-function createUI(calendar, table) {
-    table.create();
-    calendar.create();
-}
-function deleteUI(calendar, table) {
-    calendar.clean();
-    table.clean();
 }
 const calendar = new CalendarUI();
 const table = new TableUI();
-setupUI(calendar, table);
+getApplications(API_URL).then(applications => {
+    table.setApplications(applications);
+    for (const application of applications) {
+        table.addRow(application);
+        calendar.addNoteToDate("Экускурсия", application.date, application);
+    }
+});
+table.create();
+calendar.create();
 //# sourceMappingURL=admin_page.js.map

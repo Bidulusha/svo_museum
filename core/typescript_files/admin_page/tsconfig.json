@@ -2,13 +2,14 @@
     "compilerOptions": {
         "outDir": "../../static/scripts/admin_page",
         "target": "es2020",
-        "lib": ["ES5", "ES2015", "dom", "ES2017.Object"],
+        "lib": ["ES5", "ES2015", "dom", "ES2017.Object", ],
         "module": "es2020",
         "removeComments": true,
         "sourceMap": true,
-        "baseUrl": ".",
+        "moduleResolution": "bundler",
+        "strictPropertyInitialization": false,
         "paths": {
-            "/static/scripts/admin_page/*": ["./*"]
+            "/static/scripts/admin_page/*": ["./*"],
         },
     }
 }

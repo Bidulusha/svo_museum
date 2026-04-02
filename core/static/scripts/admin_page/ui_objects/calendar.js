@@ -18,9 +18,9 @@ export class CalendarUI {
                 firstDay = 7;
             for (let i = 1; i < 8; i++) {
                 let day = document.createElement("span");
-                let dayNumber = document.createElement("p");
+                let dayNumber = document.createElement("div");
                 day.classList.add("calendar__day-cell");
-                day.id = `${new Date(this.currentYear, this.currentMonth, i - firstDay + 1).toISOString().slice(0, 10)}`;
+                day.id = `d${new Date(this.currentYear, this.currentMonth, i - firstDay + 2).toISOString().slice(0, 10)}`;
                 dayNumber.classList.add("calendar__day-number");
                 dayNumber.innerText = `${new Date(this.currentYear, this.currentMonth, i - firstDay + 1).getDate()}`;
                 (i < firstDay) && dayNumber.classList.add("calendar__day-cell--previous");
@@ -35,9 +35,9 @@ export class CalendarUI {
             week.classList.add("calendar__day-numbers-row");
             for (let i = 9 - firstDay; i < daysInMonth + 1; i++) {
                 let day = document.createElement("span");
-                let dayNumber = document.createElement("p");
+                let dayNumber = document.createElement("div");
                 day.classList.add("calendar__day-cell");
-                day.id = `${new Date(this.currentYear, this.currentMonth, i).toISOString().slice(0, 10)}`;
+                day.id = `d${new Date(this.currentYear, this.currentMonth, i + 1).toISOString().slice(0, 10)}`;
                 dayNumber.classList.add("calendar__day-number");
                 dayNumber.innerText = i.toString();
                 (i == this.currentDay) && day.classList.add("calendar__day-number--current");
@@ -50,10 +50,10 @@ export class CalendarUI {
                     if (i == daysInMonth && new Date(this.currentYear, this.currentMonth, i).getDay() != 0) {
                         for (let j = 1; j < 8 - new Date(this.currentYear, this.currentMonth, i).getDay(); j++) {
                             let day = document.createElement("span");
-                            let dayNumber = document.createElement("p");
+                            let dayNumber = document.createElement("div");
                             day.classList.add("calendar__day-cell");
                             day.classList.add("calendar__day-cell--next");
-                            day.id = `${new Date(this.currentYear, this.currentMonth + 1, j).toISOString().slice(0, 10)}`;
+                            day.id = `d${new Date(this.currentYear, this.currentMonth + 1, j + 1).toISOString().slice(0, 10)}`;
                             dayNumber.classList.add("calendar__day-number");
                             dayNumber.innerText = j.toString();
                             (new Date(this.currentYear, this.currentMonth + 1, j).getDay() > 5 ||
@@ -71,18 +71,20 @@ export class CalendarUI {
                 }
             }
         };
-        this.addNoteToDate = (name, date, noteClick = this.noteOnClick) => {
+        this.addNoteToDate = (name, date, application, noteClick = this.noteOnClick) => {
             const noteDiv = document.createElement('div');
             noteDiv.innerText = name;
-            noteDiv.addEventListener("click", (e) => noteClick(e));
+            noteDiv.classList.add("calendar__day-note");
+            noteDiv.addEventListener("click", (e) => noteClick(e, application));
             try {
-                document.querySelector(`#${date.toISOString().slice(0, 10)}`).appendChild(noteDiv);
+                document.querySelector(`#d${date.toISOString().slice(0, 10)}`).appendChild(noteDiv);
             }
             catch (error) {
                 console.error(error);
             }
         };
-        this.noteOnClick = (e, noteId) => {
+        this.noteOnClick = (e, note) => {
+            alert(`Время проведения = ${note.time}`);
         };
         this.clean = () => {
         };
