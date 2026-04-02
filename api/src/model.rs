@@ -1,5 +1,3 @@
-mod struct_functions;
-mod database_functions;
 
 use serde::{Serialize, Deserialize};
 use postgres_types::{ToSql, FromSql};
@@ -37,27 +35,27 @@ pub enum ExcursionStatus {
 /*                              NARFU FOMR                       */
 #[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct NarfuFormRaw{
-    visit_date: String,
-    visit_time: String,
-    organization: String,
-    higher_school: String,
-    course: i16,
-    group: i32,
-    count_of_customers: i16,
-    name_of_accompanying: String,
-    phone_number_of_accompanying: String
+    pub visit_date: String,
+    pub visit_time: String,
+    pub organization: String,
+    pub higher_school: String,
+    pub course: i16,
+    pub group: i32,
+    pub count_of_customers: i16,
+    pub name_of_accompanying: String,
+    pub phone_number_of_accompanying: String
 }
 
 /*                              ANOTHER FORM                      */
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AnotherFormRaw{
-    visit_date: String,
-    visit_time: String,
-    organization: String,
-    organization_name: String,
-    count_of_customers: i16,
-    name_of_accompanying: String,
-    phone_number_of_accompanying: String
+    pub visit_date: String,
+    pub visit_time: String,
+    pub organization: String,
+    pub organization_name: String,
+    pub count_of_customers: i16,
+    pub name_of_accompanying: String,
+    pub phone_number_of_accompanying: String
 }
 
 /*                              APPLICATION FORM                 */

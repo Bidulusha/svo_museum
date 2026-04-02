@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::{AppState, database::model::ApplicationForm};
+use crate::{AppState, model::ApplicationForm};
 use tokio_postgres::{
     Client
 };

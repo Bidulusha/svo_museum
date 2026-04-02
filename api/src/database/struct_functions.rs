@@ -1,4 +1,4 @@
-use crate::database::model::{
+use crate::model::{
     ApplicationForm,
     AnotherFormRaw,
     NarfuFormRaw,

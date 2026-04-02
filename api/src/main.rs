@@ -1,4 +1,5 @@
 mod route;
+mod model;
 mod database;
 mod handler;
 
@@ -9,7 +10,6 @@ use std::{
 };
 use dotenv::dotenv;
 
-
 use tower_http::cors::{CorsLayer, Any};
 use route::create_route;
 use tokio_postgres::{
@@ -19,7 +19,7 @@ use tokio_postgres::{
 };
 use tokio::sync::Mutex;
 use axum::{extract::ws::{Message, WebSocket}, http::{
-    HeaderValue, Method, header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE}
+    /*HeaderValue,*/ Method, header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE}
 }};
 use futures_util::stream::SplitSink;
 

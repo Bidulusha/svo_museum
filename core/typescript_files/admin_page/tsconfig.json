@@ -3,8 +3,24 @@
         "outDir": "../../static/scripts/admin_page",
         "target": "es2020",
         "lib": ["ES5", "ES2015", "dom", "ES2017.Object"],
-        "module": "commonjs",
+        "module": "es2020",
         "removeComments": true,
-        "sourceMap": true
+        "sourceMap": true,
+        "baseUrl": ".",
+        "paths": {
+            "/static/scripts/admin_page/*": ["./*"]
+        },
     }
 }
+
+// {
+//   "compilerOptions": {
+//     "target": "ES2020",
+//     "module": "amd",
+//     "moduleResolution": "node",
+//     "outDir": "./dist",
+//     "strict": true,
+//     "rootDir": "./"
+//   },
+//   "include": ["**/*.ts"]
+// }
