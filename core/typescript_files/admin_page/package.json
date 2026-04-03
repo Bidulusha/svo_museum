@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "esbuild": "^0.28.0",
+    "websocket-ts": "^2.3.0"
+  },
+  "scripts": {
+    "build": "esbuild admin_page.ts --bundle --outfile=../../static/scripts/admin_page/admin_page.js --watch "
+  }
+}

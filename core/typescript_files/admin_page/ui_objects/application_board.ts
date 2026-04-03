@@ -1,4 +1,4 @@
-import { objectUI } from "/static/scripts/admin_page/ui_objects/interface.js";
+import { objectUI } from "./interface.js";
 
 //Applications board
 export class ApplicationsBoardUI implements objectUI {

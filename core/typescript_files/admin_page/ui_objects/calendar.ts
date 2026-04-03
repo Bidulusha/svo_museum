@@ -1,5 +1,5 @@
-import { Application } from "/static/scripts/admin_page/objects/application";
-import { objectUI } from "/static/scripts/admin_page/ui_objects/interface.js";
+import { Application } from "../objects/application";
+import { objectUI } from "./interface.js";
 
 export class CalendarUI implements objectUI {
     //Const

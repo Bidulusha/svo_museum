@@ -1,5 +1,5 @@
-import { objectUI } from "/static/scripts/admin_page/ui_objects/interface.js";
-import { Application, HigherSchool } from "/static/scripts/admin_page/objects/application.js";
+import { objectUI } from "./interface.js";
+import { Application, HigherSchool } from "../objects/application.js";
 
 //Table UI
 export class TableUI implements objectUI {

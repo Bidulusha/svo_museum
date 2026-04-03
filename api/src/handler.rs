@@ -49,7 +49,7 @@ pub async fn send_new_application(state: &Arc<AppState>){ //Can we use only one 
             match sender
                 .send(Message::Text(serde_json::to_string(&application).unwrap().into()))
                 .await {
-                    Ok(_) => {}
+                    Ok(_) => {println!("Sended!");}
                     Err(err) => {println!("Error to send new application! Error message: {:?}", err)}
                 }
             state.senders.lock().await.push_front(sender);
@@ -57,7 +57,6 @@ pub async fn send_new_application(state: &Arc<AppState>){ //Can we use only one 
         else {
             println!("No senders!")
         };
-
     }
 }
 

@@ -64,6 +64,7 @@ export class Application {
 
     constructor() {}
 
+
     //Date
     get date (): Date { return new Date(this.visit_date); }
     get dateString(): string { return (new Date(this.visit_date)).toISOString().slice(0, 10); }   

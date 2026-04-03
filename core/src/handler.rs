@@ -70,7 +70,7 @@ struct SubmittedFormTemplate {}
 
 pub async fn submitted_form_page(raw_data: String) -> impl IntoResponse{
     let template = SubmittedFormTemplate {};
-
+    println!("on submitted form");
     let client = reqwest::Client::new();
     client.post("http://localhost:8080/api/insert_application")
         .body(raw_data)
