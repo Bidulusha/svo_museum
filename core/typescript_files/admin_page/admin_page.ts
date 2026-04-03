@@ -2,35 +2,31 @@
 import { CalendarUI } from "./ui_objects/calendar";
 import { TableUI } from "./ui_objects/table";
 // Applications
-import { Application } from "./objects/application";
+import { Application, getApplications } from "./objects/application";
 // Websocket
-import { WebsocketManager } from "./websocket_manager";
+import { WebsocketManager } from "./api/websocket_manager";
 // Constants
 import { API_URL } from "./constants";
+import { Websocket } from "websocket-ts";
 
-
-async function getApplications (url: string) : Promise<Application[]> {
-    try {
-        const response = await fetch(url);
-        if(!response.ok){
-            throw new Error(`Response status: ${response.status}`);
-        }
-
-        const result = await response.json();
-        const applications: Application[] = [];
-        result.forEach((value: object) => {
-            applications.push(Object.assign(new Application(), value));
-        });
-        return applications;
-    } catch(error) {
-        console.error(error)
-        return [];
-    }
-}
 
 const calendar: CalendarUI = new CalendarUI();
 const table: TableUI = new TableUI();
 const ws_manager: WebsocketManager = new WebsocketManager();
+
+ws_manager.setupListeners((i: Websocket, ev: MessageEvent) => {
+    console.log(`received message:\n>>> ${ev.data}`);
+    try {
+        const result: object = JSON.parse(ev.data);
+        const application: Application = Object.assign(new Application (), result);
+
+        console.log("New application!");
+        alert("Новая заявка!");
+        table.addRow(application);
+        calendar.addNoteToDate("Экускурсия", application.date, application);
+    } catch (_) { }
+    i.send("get, thx");
+});
 
 getApplications(API_URL).then(applications => {
     table.setApplications(applications);

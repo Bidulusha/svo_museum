@@ -17,7 +17,7 @@ use tokio_postgres::{
     Error,
     Client
 };
-use tokio::sync::Mutex;
+use tokio::sync::broadcast::{self, Receiver, Sender};
 use axum::{extract::ws::{Message, WebSocket}, http::{
     /*HeaderValue,*/ Method, header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE}
 }};
@@ -25,7 +25,8 @@ use futures_util::stream::SplitSink;
 
 struct AppState{
     client: Client,
-    senders: Arc<Mutex<VecDeque<SplitSink<WebSocket, Message>>>>
+    tx: Sender<String>,
+    rx: Receiver<String>
 }
 
 
@@ -59,9 +60,12 @@ async fn main() -> Result<(), Error>{
         .allow_headers([ACCEPT, AUTHORIZATION, CONTENT_TYPE]);
 
     //Create app
+    let (tx, rx) = broadcast::channel::<String>(16);
+
     let state = AppState {
             client,
-            senders: Arc::new(Mutex::new(VecDeque::<SplitSink<WebSocket, Message>>::new()))
+            tx,
+            rx
         };
     let app = create_route(Arc::new(state)).layer(cors);
     //Create listener

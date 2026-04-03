@@ -263,6 +263,23 @@
       return this.visit_time.slice(0, 5);
     }
   };
+  async function getApplications(url) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      const result = await response.json();
+      const applications = [];
+      result.forEach((value) => {
+        applications.push(Object.assign(new Application(), value));
+      });
+      return applications;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }
 
   // node_modules/websocket-ts/dist/esm/src/backoff/constantbackoff.js
   var ConstantBackoff = class {
@@ -848,52 +865,45 @@
   var API_URL = "http://localhost:8080/api/get_applications";
   var WS_URL = "http://localhost:8080/api/admin_page_ws";
 
-  // websocket_manager.ts
+  // api/websocket_manager.ts
   var WebsocketManager = class {
     constructor() {
-      this.addListeners = () => {
+      this.setupListeners = (echoOnMessage) => {
         this.ws.addEventListener(WebsocketEvent.open, (i) => console.log("opened!"));
         this.ws.addEventListener(WebsocketEvent.close, () => console.log("closed!"));
-        this.ws.addEventListener(WebsocketEvent.message, (i, ev) => this.echoOnMessage(i, ev));
+        this.ws.addEventListener(WebsocketEvent.message, (i, ev) => echoOnMessage(i, ev));
       };
-      this.echoOnMessage = (i, ev) => {
-        console.log(`received message: ${ev.data}`);
-        try {
-          const result = JSON.parse(ev.data);
-          const applications = [];
-          result.forEach((value) => {
-            applications.push(Object.assign(new Application(), value));
-          });
-        } catch (_) {
-        }
-        i.send(`echo: ${ev.data}`);
-      };
-      this.ws = new WebsocketBuilder(WS_URL).withBackoff(new ConstantBackoff(100)).build();
-      this.addListeners();
+      this.ws = new WebsocketBuilder(WS_URL).withBackoff(new ConstantBackoff(1e3)).build();
     }
+    // echoOnMessage = (i: Websocket, ev: MessageEvent): MessageType => {
+    //     console.log(`received message: ${ev.data}`);
+    //     try{
+    //         const result: object = JSON.parse(ev.data);
+    //         const application: Application = Object.assign(new Application(), result);
+    //         console.log(application);
+    //     } catch (_) { }
+    //     i.send(`echo: ${ev.data}`);
+    // }
   };
 
   // admin_page.ts
-  async function getApplications(url) {
-    try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-      }
-      const result = await response.json();
-      const applications = [];
-      result.forEach((value) => {
-        applications.push(Object.assign(new Application(), value));
-      });
-      return applications;
-    } catch (error) {
-      console.error(error);
-      return [];
-    }
-  }
   var calendar = new CalendarUI();
   var table = new TableUI();
   var ws_manager = new WebsocketManager();
+  ws_manager.setupListeners((i, ev) => {
+    console.log(`received message:
+>>> ${ev.data}`);
+    try {
+      const result = JSON.parse(ev.data);
+      const application = Object.assign(new Application(), result);
+      console.log("New application!");
+      alert("\u041D\u043E\u0432\u0430\u044F \u0437\u0430\u044F\u0432\u043A\u0430!");
+      table.addRow(application);
+      calendar.addNoteToDate("\u042D\u043A\u0443\u0441\u043A\u0443\u0440\u0441\u0438\u044F", application.date, application);
+    } catch (_) {
+    }
+    i.send("get, thx");
+  });
   getApplications(API_URL).then((applications) => {
     table.setApplications(applications);
     for (const application of applications) {

@@ -32,6 +32,9 @@ use axum_extra::{
     headers
 };
 
+// Tokio
+use tokio::sync::broadcast;
+
 //futures util
 use futures_util::{sink::SinkExt, stream::StreamExt};
 
@@ -39,25 +42,26 @@ use serde_html_form;
 
 // Send new application to admin pages
 pub async fn send_new_application(state: &Arc<AppState>){ //Can we use only one lock?
-    let applications = ApplicationForm::select_all(&state.client).await;
-    let application = &applications[applications.len() - 1];
-    println!("here!");
-    let ind = state.senders.lock().await.len();
-    println!("{ind}");
-    for i in 0..ind{
-        if let Some(mut sender) = state.senders.lock().await.pop_back() {
-            match sender
-                .send(Message::Text(serde_json::to_string(&application).unwrap().into()))
-                .await {
-                    Ok(_) => {println!("Sended!");}
-                    Err(err) => {println!("Error to send new application! Error message: {:?}", err)}
-                }
-            state.senders.lock().await.push_front(sender);
-        }
-        else {
-            println!("No senders!")
-        };
-    }
+
+    // let applications = ApplicationForm::select_all(&state.client).await;
+    // let application = &applications[applications.len() - 1];
+    // println!("here!");
+    // let ind = state.senders.lock().await.len();
+    // println!("{ind}");
+    // for i in 0..ind{
+    //     if let Some(mut sender) = state.senders.lock().await.pop_back() {
+    //         match sender
+    //             .send(Message::Text(serde_json::to_string(&application).unwrap().into()))
+    //             .await {
+    //                 Ok(_) => {println!("Sended!");}
+    //                 Err(err) => {println!("Error to send new application! Error message: {:?}", err)}
+    //             }
+    //         state.senders.lock().await.push_front(sender);
+    //     }
+    //     else {
+    //         println!("No senders!")
+    //     };
+    // }
 }
 
 
@@ -81,8 +85,15 @@ pub async fn add_application_to_database(State(state): State<Arc<AppState>>, raw
         }
     }
     println!("{:?}", data);
+    if let Ok(data_string) = serde_json::to_string(&data) {
+        let _ = state.tx.send(data_string);
+        println!("Sended!");
+    } else {
+        println!("Problem to send!");
+    };
+    
     let ans = ApplicationForm::insert_into(&state, data.unwrap()).await;
-    send_new_application(&state).await;
+    //send_new_application(&state).await;
 
     return Json(ans);
 }
@@ -145,12 +156,15 @@ async fn handle_socket(mut socket: WebSocket, who: SocketAddr, state: Arc<AppSta
         return;
     }
 
-    //Add to state sender and create id
-    state.senders.lock().await.push_back(sender);
+    let mut rx2 = state.tx.subscribe();
 
     //Spawn while close answering
     let mut recv_task = tokio::spawn(async move{
         while let Some(Ok(msg)) = receiver.next().await {
+            if let Ok(data) = rx2.recv().await {
+                println!("Get!");
+                let _ = sender.send(Message::text(data)).await;
+            }
             if process_message(msg, who).is_break() {
                 break;
             }

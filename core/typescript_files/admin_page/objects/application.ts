@@ -92,3 +92,22 @@ export class Application {
         ];
     }
 }
+
+export async function getApplications (url: string) : Promise<Application[]> {
+    try {
+        const response = await fetch(url);
+        if(!response.ok){
+            throw new Error(`Response status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        const applications: Application[] = [];
+        result.forEach((value: object) => {
+            applications.push(Object.assign(new Application(), value));
+        });
+        return applications;
+    } catch(error) {
+        console.error(error)
+        return [];
+    }
+}
